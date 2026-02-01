@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HBD Hadia 💖</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --pink: #ff4d6d; --dark-pink: #c9184a; --bg: #fff0f3; }
+        body { margin: 0; font-family: 'Poppins', sans-serif; background: var(--bg); color: #590d22; text-align: center; overflow: hidden; }
+        .screen { height: 100vh; display: none; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
+        #screen1 { display: flex; }
+        h1 { font-family: 'Dancing Script', cursive; font-size: 2.5rem; color: var(--dark-pink); }
+        
+        /* Buttons */
+        .btn { background: var(--pink); color: white; border: none; padding: 15px 30px; border-radius: 50px; font-size: 1.1rem; cursor: pointer; box-shadow: 0 4px 15px rgba(255,77,109,0.3); }
+
+        /* Cake & Candle */
+        .cake-box { position: relative; cursor: pointer; user-select: none; }
+        .candle { font-size: 40px; position: absolute; top: -40px; left: 50%; transform: translateX(-50%); transition: 0.3s; }
+        .flame { animation: flicker 0.1s infinite alternate; }
+        @keyframes flicker { from { opacity: 1; } to { opacity: 0.7; } }
+        .cake-img { font-size: 120px; transition: transform 0.5s; }
+        .slice-text { font-size: 0.8rem; color: #888; margin-top: 10px; }
+
+        /* Envelopes */
+        .env-container { display: flex; gap: 15px; margin-top: 20px; }
+        .env { font-size: 50px; cursor: pointer; transition: 0.3s; }
+        .env:hover { transform: scale(1.1); }
+        .letter-box { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); margin-top: 20px; width: 90%; max-width: 350px; display: none; border-left: 5px solid var(--pink); animation: slideUp 0.5s ease; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* Balloons */
+        .balloon { position: absolute; bottom: -100px; font-size: 40px; animation: floatUp 4s linear forwards; }
+        @keyframes floatUp { to { transform: translateY(-110vh); } }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <section id="screen1" class="screen">
+        <h1>Happy Birthday my dear bestie Hadia! 🌸</h1>
+        <p>Surprise for you...</p>
+        <button class="btn" onclick="startApp()">Tap the button to start</button>
+    </section>
+
+    <section id="screen2" class="screen">
+        <h2 id="cakeInstruction">Tap the candle to blow it out! 🕯️</h2>
+        <div class="cake-box" id="cakeBox">
+            <div class="candle" id="candle" onclick="blowCandle()"><span class="flame">🔥</span>🕯️</div>
+            <div class="cake-img" id="cakeMain">🎂</div>
+            <h2 style="font-family:'Dancing Script';">Happy Birthday Hadia</h2>
+        </div>
+        <p id="slideHint" style="display:none;">Now slide your finger across the cake to cut it!</p>
+    </section>
+
+    <section id="screen3" class="screen">
+        <h1>Open one by one... 💌</h1>
+        <div class="env-container">
+            <div class="env" onclick="openEnv(1)">✉️</div>
+            <div class="env" onclick="openEnv(2)">✉️</div>
+            <div class="env" onclick="openEnv(3)">✉️</div>
+        </div>
+
+        <div id="letter1" class="letter-box">
+            <h3>Bestie's Wish ✨</h3>
+            <p>"A friend is someone who knows all about you and still loves you." - Elbert Hubbard</p>
+            <p>Hadia, may your day be as bright as your smile! 🌟</p>
+        </div>
+
+        <div id="letter2" class="letter-box">
+            <h3>Special Note ❤️</h3>
+            <p>You are the <b>most trusted person</b> in my life. In this world of fake people, I'm glad I found someone as real as you. 🫂</p>
+        </div>
+
+        <div id="letter3" class="letter-box">
+            <h3>My Prayer 🤲</h3>
+            <p>Meri dua hai ke tum hamesha mere sath raho aur hum aise hi har birthday celebrate karein. Stay blessed!</p>
+            <p><b>From your bestie, <br> Maham Nawaz 🌹</b></p>
+        </div>
+    </section>
+
+    <script>
+        const music = document.getElementById('bgMusic');
+        let candleOut = false;
+
+        function startApp() {
+            music.play();
+            showScreen('screen2');
+        }
+
+        function blowCandle() {
+            document.getElementById('candle').innerHTML = '🕯️';
+            document.getElementById('cakeInstruction').innerText = "Now slide/tap the cake to cut!";
+            candleOut = true;
+            // Add event listener for cutting
+            document.getElementById('cakeMain').onclick = cutCake;
+        }
+
+        function cutCake() {
+            if(!candleOut) return;
+            document.getElementById('cakeMain').innerHTML = '🍰';
+            for(let i=0; i<15; i++) { createBalloon(); }
+            setTimeout(() => showScreen('screen3'), 3000);
+        }
+
+        function openEnv(num) {
+            // Hide all
+            document.querySelectorAll('.letter-box').forEach(l => l.style.display = 'none');
+            // Show specific
+            document.getElementById('letter' + num).style.display = 'block';
+        }
+
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.style.display = 'none');
+            document.getElementById(id).style.display = 'flex';
+        }
+
+        function createBalloon() {
+            const b = document.createElement('div');
+            b.className = 'balloon';
+            b.innerText = ['🎈','💖','✨'][Math.floor(Math.random()*3)];
+            b.style.left = Math.random() * 100 + 'vw';
+            b.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            document.body.appendChild(b);
+            setTimeout(() => b.remove(), 4000);
+        }
+    </script>
+</body>
+</html>
